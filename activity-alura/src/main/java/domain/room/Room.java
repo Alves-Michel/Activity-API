@@ -27,4 +27,6 @@ public class Room {
     private RoomStats roomStats;
 
     private Integer roomNumber;
+
+    public boolean active;
 }

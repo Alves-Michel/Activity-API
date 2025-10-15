@@ -2,17 +2,14 @@ package domain.reservation;
 
 import domain.room.Room;
 import domain.user.User;
+import exception.DomainException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.sql.results.DomainResultCreationException;
 
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 
 @Entity
 @AllArgsConstructor
@@ -25,34 +22,65 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long reservationId;
 
-    @ManyToOne(optional = false)// impede reservas sem usuário
+    @ManyToOne(optional = false)
     @JoinColumn(name = "userId", referencedColumnName = "userId")
     private User user;
 
-    // Relacionamento com a sala reservada
     @ManyToOne(optional = false)
     @JoinColumn(name = "roomId", referencedColumnName = "roomId")
     private Room room;
 
-    // Data da reserva
     @Column(nullable = false)
     private LocalDateTime start;
 
     @Column(nullable = false)
     private LocalDateTime end;
 
-    @Enumerated(EnumType.STRING) // STATUS DA RESERVA(ENUM CRIADO)
+    private boolean existsConflict;
+
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReservationStats reservationStats;
 
-    private void validateDate(LocalDateTime start, LocalDateTime end){
-        if(start == null || end == null) throw new DomainResultCreationException("Date doesn't exist");
-        if(!start.isBefore(end)) throw new DomainResultCreationException("Date starts before end");
+    @Column(nullable = false)
+    private int attendees;
+
+    // --------------------------------------------
+    // ✅ Construtor de domínio com validações
+    // --------------------------------------------
+    public Reservation(User user, Room room, LocalDateTime start, LocalDateTime end, int attendees, ReservationStats status) {
+        validateDates(start, end);
+        validateAttendees(attendees);
+
+        if (room == null) throw new DomainException("A sala não pode ser nula.");
+        if (user == null) throw new DomainException("O usuário não pode ser nulo.");
+        if (!room.isActive()) throw new DomainException("Não é possível reservar uma sala inativa.");
+        if (room.getRoomCapacity() <= 0) throw new DomainException("A capacidade da sala deve ser positiva.");
+        if (attendees > room.getRoomCapacity()) throw new DomainException("Número de participantes excede a capacidade da sala.");
+
+        this.user = user;
+        this.room = room;
+        this.start = start;
+        this.end = end;
+        this.attendees = attendees;
+        this.reservationStats = status;
     }
 
-    private void valiateAttendees(int attendees){
-
-        if(attendees <= 0) throw new DomainResultCreationException("Attendees must be positive");
+    // --------------------------------------------
+    // ✅ Validações privadas de domínio
+    // --------------------------------------------
+    private void validateDates(LocalDateTime start, LocalDateTime end) {
+        if (start == null || end == null) {
+            throw new DomainException("Datas de início e fim são obrigatórias.");
+        }
+        if (!start.isBefore(end)) {
+            throw new DomainException("A data de início deve ser anterior à data de fim.");
+        }
     }
 
+    private void validateAttendees(int attendees) {
+        if (attendees <= 0) {
+            throw new DomainException("O número de participantes deve ser positivo.");
+        }
+    }
 }
