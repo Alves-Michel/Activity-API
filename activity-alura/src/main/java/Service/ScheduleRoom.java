@@ -18,7 +18,7 @@ public class ScheduleRoom {
     private ReservationRepository reservationRepository;
 
     public CreateReservation (Long roomId, LocalDateTime start, LocalDateTime end){
-
+return null;
 
     }
 
