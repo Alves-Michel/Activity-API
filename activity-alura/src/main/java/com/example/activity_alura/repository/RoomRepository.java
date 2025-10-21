@@ -1,6 +1,6 @@
-package Repository;
+package com.example.activity_alura.repository;
 
-import domain.room.Room;
+import com.example.activity_alura.domain.room.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

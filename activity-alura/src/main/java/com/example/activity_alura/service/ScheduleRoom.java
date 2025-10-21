@@ -1,12 +1,12 @@
-package Service;
+package com.example.activity_alura.service;
 
-import Repository.ReservationRepository;
-import Repository.RoomRepository;
-import domain.reservation.Reservation;
-import domain.reservation.ReservationStats;
-import domain.room.Room;
-import domain.user.User;
-import exception.DomainException;
+import com.example.activity_alura.repository.ReservationRepository;
+import com.example.activity_alura.repository.RoomRepository;
+import com.example.activity_alura.domain.reservation.Reservation;
+import com.example.activity_alura.domain.reservation.ReservationStats;
+import com.example.activity_alura.domain.room.Room;
+import com.example.activity_alura.domain.user.User;
+import com.example.activity_alura.exception.DomainException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +28,10 @@ public class ScheduleRoom {
                 .orElseThrow(() -> new DomainException("Sala não encontrada."));
 
         //  Verifica conflito de horário
-        boolean conflict = reservationRepository.existsConflict(room.getRoomId(), start, end);
+        /*boolean conflict = reservationRepository.existsConflict(room.getRoomId(), start, end);
         if (conflict) {
             throw new DomainException("Já existe uma reserva para este horário.");
-        }
+        }*/
 
 
         Reservation reservation = new Reservation(

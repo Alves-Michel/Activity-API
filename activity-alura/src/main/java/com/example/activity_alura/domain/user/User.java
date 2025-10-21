@@ -1,10 +1,6 @@
-package domain.user;
+package com.example.activity_alura.domain.user;
 
-import domain.room.RoomStats;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +11,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Table(name = "app_user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    private String username;
+    private String userName;
 
     private String password;
 
@@ -33,13 +30,6 @@ public class User {
 
     private String phone;
 
-    private String address;
-
-    private String city;
-
-    private String state;
-
-    private String country;
 
 
 }

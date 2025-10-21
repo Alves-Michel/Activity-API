@@ -1,8 +1,8 @@
-package domain.reservation;
+package com.example.activity_alura.domain.reservation;
 
-import domain.room.Room;
-import domain.user.User;
-import exception.DomainException;
+import com.example.activity_alura.domain.room.Room;
+import com.example.activity_alura.domain.user.User;
+import com.example.activity_alura.exception.DomainException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,10 +30,10 @@ public class Reservation {
     @JoinColumn(name = "roomId", referencedColumnName = "roomId")
     private Room room;
 
-    @Column(nullable = false)
+    @Column(name = "start_time",nullable = false)
     private LocalDateTime start;
 
-    @Column(nullable = false)
+    @Column(name = "end_time", nullable = false )
     private LocalDateTime end;
 
     private boolean existsConflict;
@@ -67,7 +67,7 @@ public class Reservation {
     }
 
     // --------------------------------------------
-    // ✅ Validações privadas de domínio
+    // Validações privadas de domínio
     // --------------------------------------------
     private void validateDates(LocalDateTime start, LocalDateTime end) {
         if (start == null || end == null) {

@@ -1,4 +1,4 @@
-package domain.room;
+package com.example.activity_alura.domain.room;
 
 
 import jakarta.persistence.*;

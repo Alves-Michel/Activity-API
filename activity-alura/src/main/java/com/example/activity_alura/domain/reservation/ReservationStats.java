@@ -1,4 +1,4 @@
-package domain.reservation;
+package com.example.activity_alura.domain.reservation;
 
 public enum ReservationStats {
     CONFIRMED,
