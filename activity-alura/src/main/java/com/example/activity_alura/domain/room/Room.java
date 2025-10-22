@@ -28,5 +28,5 @@ public class Room {
 
     private Integer roomNumber;
 
-    public boolean active;
+
 }

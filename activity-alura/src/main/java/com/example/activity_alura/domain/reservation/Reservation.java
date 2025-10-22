@@ -54,7 +54,7 @@ public class Reservation {
 
         if (room == null) throw new DomainException("A sala não pode ser nula.");
         if (user == null) throw new DomainException("O usuário não pode ser nulo.");
-        if (!room.isActive()) throw new DomainException("Não é possível reservar uma sala inativa.");
+        //if (!room.isActive()) throw new DomainException("Não é possível reservar uma sala inativa.");
         if (room.getRoomCapacity() <= 0) throw new DomainException("A capacidade da sala deve ser positiva.");
         if (attendees > room.getRoomCapacity()) throw new DomainException("Número de participantes excede a capacidade da sala.");
 

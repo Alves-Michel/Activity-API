@@ -1,20 +1,22 @@
 package com.example.activity_alura.service;
 
+import com.example.activity_alura.domain.user.UserDTO;
 import com.example.activity_alura.repository.UserRepository;
 import com.example.activity_alura.domain.user.User;
 import com.example.activity_alura.domain.user.UserRequestDTO;
 import com.example.activity_alura.domain.user.UserResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class RegisterUser {
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -44,6 +46,19 @@ public class RegisterUser {
 
         return ResponseEntity.badRequest().build();
 
+    }
+
+
+    public List<UserDTO> findAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> new UserDTO(
+                        user.getName(),
+                        user.getEmail(),
+                        user.getUserName(),
+                        user.getCpf(),
+                        user.getPhone()
+
+                        )).collect(Collectors.toList());
     }
 
 }
