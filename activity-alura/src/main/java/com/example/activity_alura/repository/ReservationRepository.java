@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 public interface ReservationRepository extends JpaRepository<Reservation,Long> {
 
-    boolean existsByRoomId(Long roomId, LocalDate date, LocalTime start);
+    boolean existsByRoom_RoomIdAndDateAndStart(Long roomId, LocalDate date, LocalTime start);
 
     /*boolean existsConflict(long roomId, LocalDateTime start, LocalDateTime end);#*/
 }

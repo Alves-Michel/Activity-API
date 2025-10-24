@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-public interface RoomRepository extends JpaRepository<Room,String> {
+public interface RoomRepository extends JpaRepository<Room,Long> {
     Optional<Room> findByRoomName(String roomName);
     Optional<Room> findByRoomId(Long roomId);
 

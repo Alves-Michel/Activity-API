@@ -13,7 +13,7 @@ public class ValidatorOtherReservationSameHours implements ValidatorReservationR
     private ReservationRepository reservationRepository;
 
     public void validate(ReservationDTO reservationDTO) {
-        var ReserveHaveOtherSameHours = reservationRepository.existsByRoomId(reservationDTO.roomId(), reservationDTO.date(),reservationDTO.start());
+        var ReserveHaveOtherSameHours = reservationRepository.existsByRoom_RoomIdAndDateAndStart(reservationDTO.roomId(), reservationDTO.date(),reservationDTO.start());
         if (ReserveHaveOtherSameHours) {
             throw new ValidationException("Reservation already exists same hours");
         }
