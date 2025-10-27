@@ -3,10 +3,12 @@ package com.example.activity_alura.service;
 import com.example.activity_alura.domain.reservation.DataDetailsReservation;
 import com.example.activity_alura.domain.reservation.Reservation;
 import com.example.activity_alura.domain.reservation.ReservationDTO;
+import com.example.activity_alura.domain.reservation.ResponseReservationDTO;
 import com.example.activity_alura.domain.reservation.validation.cancellation.ValidatorCancellation;
 import com.example.activity_alura.domain.reservation.validation.scheduling.ValidatorReservationRoom;
 import com.example.activity_alura.domain.room.Room;
 import com.example.activity_alura.domain.room.RoomStats;
+import com.example.activity_alura.domain.user.User;
 import com.example.activity_alura.repository.ReservationRepository;
 import com.example.activity_alura.repository.RoomRepository;
 import com.example.activity_alura.repository.UserRepository;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationService {
@@ -92,4 +96,45 @@ public class ReservationService {
         return room;
     }
 
+    public List<ResponseReservationDTO> findAllReservation(){
+        return  reservationRepository.findAll().stream()
+                .map( reservation -> new ResponseReservationDTO(
+                        reservation.getRoom().getRoomNumber(),
+                        reservation.getRoom().getRoomName(),
+                        reservation.getUser().getName(),
+                        reservation.getDate(),
+                        reservation.getStart(),
+                        reservation.getEnd(),
+                        reservation.getReservationStats()
+                )).collect(Collectors.toList());
+    }
+
+
+    public void updateReservation(Long reservationId, ReservationDTO data){
+        if(!userRepository.existsById(data.userId())){
+            throw new ValidationException("User does not exist");
+        }
+        if(data.roomId() != null && !roomRepository.existsById(data.roomId())){
+            throw new ValidationException("Room does not exist");
+        }
+
+        var reservation = reservationRepository.findById(reservationId);
+        if(reservation.isPresent()){
+            var reserve = reservation.get();
+            Optional.ofNullable(data.roomId()).ifPresent(roomId -> {
+                Room room = roomRepository.findById(roomId).orElseThrow(() -> new ValidationException("Room not found"));
+            });
+            Optional.ofNullable(data.userId()).ifPresent(userId -> {
+                User user = userRepository.findById(userId).orElseThrow(() -> new ValidationException("User not found"));
+            });
+            Optional.ofNullable(data.date()).ifPresent(reserve::setDate);
+            Optional.ofNullable(data.start()).ifPresent(reserve::setStart);
+            Optional.ofNullable(data.end()).ifPresent(reserve::setEnd);
+            Optional.ofNullable(data.stats()).ifPresent(reserve::setReservationStats);
+
+            reservationRepository.save(reserve);
+        }
+
+
+    }
 }
