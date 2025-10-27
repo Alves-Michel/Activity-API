@@ -1,9 +1,10 @@
-package com.example.activity_alura.domain.reservation.validacoes.scheduling;
+package com.example.activity_alura.domain.reservation.validation.scheduling;
 
 import com.example.activity_alura.domain.reservation.ReservationDTO;
 import com.example.activity_alura.domain.room.RoomStats;
+import com.example.activity_alura.infra.exception.ValidationException;
 import com.example.activity_alura.repository.RoomRepository;
-import jakarta.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

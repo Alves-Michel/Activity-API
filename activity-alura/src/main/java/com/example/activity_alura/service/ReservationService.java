@@ -1,11 +1,10 @@
 package com.example.activity_alura.service;
 
-import com.example.activity_alura.domain.reservation.CancellationReservationDTO;
 import com.example.activity_alura.domain.reservation.DataDetailsReservation;
 import com.example.activity_alura.domain.reservation.Reservation;
 import com.example.activity_alura.domain.reservation.ReservationDTO;
-import com.example.activity_alura.domain.reservation.validacoes.cancellation.ValidatorCancellation;
-import com.example.activity_alura.domain.reservation.validacoes.scheduling.ValidatorReservationRoom;
+import com.example.activity_alura.domain.reservation.validation.cancellation.ValidatorCancellation;
+import com.example.activity_alura.domain.reservation.validation.scheduling.ValidatorReservationRoom;
 import com.example.activity_alura.domain.room.Room;
 import com.example.activity_alura.domain.room.RoomStats;
 import com.example.activity_alura.repository.ReservationRepository;
@@ -45,7 +44,7 @@ public class ReservationService {
             throw new ValidationException("Room does not exist");
         }
 
-        //validatorCancellations.forEach(v -> v.validate(data));
+        validatorReservationRooms.forEach(v -> v.validate(data));
 
         var user = userRepository.findById(data.userId())
                 .orElseThrow(() -> new ValidationException("User does not exist"));;
@@ -72,6 +71,8 @@ public class ReservationService {
                 data.end()
         );
     }
+
+
 
 
     private Room chooseRoom(ReservationDTO data) {

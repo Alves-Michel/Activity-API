@@ -1,9 +1,9 @@
-package com.example.activity_alura.domain.reservation.validacoes.cancellation;
+package com.example.activity_alura.domain.reservation.validation.cancellation;
 
 
 import com.example.activity_alura.domain.reservation.CancellationReservationDTO;
 import com.example.activity_alura.repository.ReservationRepository;
-import jakarta.validation.ValidationException;
+import com.example.activity_alura.infra.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

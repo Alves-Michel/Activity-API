@@ -1,4 +1,4 @@
-package com.example.activity_alura.domain.reservation.validacoes.scheduling;
+package com.example.activity_alura.domain.reservation.validation.scheduling;
 
 import com.example.activity_alura.domain.reservation.ReservationDTO;
 

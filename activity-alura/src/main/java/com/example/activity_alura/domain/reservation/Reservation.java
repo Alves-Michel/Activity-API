@@ -2,7 +2,7 @@ package com.example.activity_alura.domain.reservation;
 
 import com.example.activity_alura.domain.room.Room;
 import com.example.activity_alura.domain.user.User;
-import com.example.activity_alura.exception.DomainException;
+import com.example.activity_alura.infra.exception.ValidationException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

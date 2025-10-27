@@ -1,7 +1,7 @@
-package com.example.activity_alura.domain.reservation.validacoes.scheduling;
+package com.example.activity_alura.domain.reservation.validation.scheduling;
 
 import com.example.activity_alura.domain.reservation.ReservationDTO;
-import jakarta.validation.ValidationException;
+import com.example.activity_alura.infra.exception.ValidationException;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
