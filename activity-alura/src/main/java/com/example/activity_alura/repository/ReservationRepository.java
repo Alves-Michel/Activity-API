@@ -7,10 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation,Long> {
 
     boolean existsByRoom_RoomIdAndDateAndStart(Long roomId, LocalDate date, LocalTime start);
+    List<Reservation> findByreservationId(Long reservationId);
 
     @Query("""
     SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END

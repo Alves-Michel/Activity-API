@@ -1,9 +1,6 @@
 package com.example.activity_alura.service;
 
-import com.example.activity_alura.domain.reservation.DataDetailsReservation;
-import com.example.activity_alura.domain.reservation.Reservation;
-import com.example.activity_alura.domain.reservation.ReservationDTO;
-import com.example.activity_alura.domain.reservation.ResponseReservationDTO;
+import com.example.activity_alura.domain.reservation.*;
 import com.example.activity_alura.domain.reservation.validation.cancellation.ValidatorCancellation;
 import com.example.activity_alura.domain.reservation.validation.scheduling.ValidatorReservationRoom;
 import com.example.activity_alura.domain.room.Room;
@@ -16,6 +13,7 @@ import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -134,7 +132,51 @@ public class ReservationService {
 
             reservationRepository.save(reserve);
         }
+    }
+
+    public List<ResponseReservationDTO> searchReservation(String roomName, String roomNumber, String userUserName, String startDate, String endDate){
+        List<Reservation> reservations = reservationRepository.findAll();
+        if(reservations.isEmpty()){
+            throw new ValidationException("Reservation not found");
+        }
+
+        return reservations.stream()
+                .filter(r -> roomName == null || r.getRoom().getRoomName().toLowerCase().contains(roomName.toLowerCase()))
+                .filter(r -> roomNumber == null || r.getRoom().getRoomNumber().equals(roomNumber))
+                .filter(r -> userUserName == null || r.getUser().getUserName().toLowerCase().contains(userUserName.toLowerCase()))
+                .filter(r -> startDate == null || r.getStart().toString().equals(startDate))
+                .filter(r -> endDate == null || r.getEnd().toString().equals(endDate))
+                .map(r -> new ResponseReservationDTO(
+                        r.getRoom().getRoomNumber(),
+                        r.getRoom().getRoomName(),
+                        r.getUser().getName(),
+                        r.getDate(),
+                        r.getStart(),
+                        r.getEnd(),
+                        r.getReservationStats()
+                )).collect(Collectors.toList());
 
 
     }
+
+    public void cancelReservation(Long reservationId, CancellationReason reason){
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ValidationException("Reservation not found"));
+        if (reservation.getReservationStats() == ReservationStats.CANCELLED){
+            throw new ValidationException("Reservation already cancelled");
+        }
+
+        reservation.setReservationStats(ReservationStats.CANCELLED);
+        reservation.setCancellationReason(reason);
+        reservationRepository.save(reservation);
+
+    }
+
+
+
+
+
+
+
+
 }
